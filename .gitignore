@@ -1,0 +1,46 @@
+# Node.js e Vue.js
+node_modules/
+dist/
+.env
+.cache/
+*.pid
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Configuration du système d'exploitation
+.DS_Store
+Thumbs.db
+
+# Répertoires IDE
+.vscode/
+.idea/
+
+# Fichiers temporaires
+*.swp
+*.tmp
+*.bak
+*.log
+
+
+# Types de fichier raster
+*.tiff
+*.tif
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.asc
+*.grd
+*.vrt
+
+# QGIS
+*.qgs~
+*.qgz~
+
+# Fichiers spécifiques
+ChatGPT.md
+UE902-1_Webmapping_sujet_2024-25.pdf

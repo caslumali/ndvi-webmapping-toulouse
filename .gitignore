@@ -9,6 +9,7 @@ dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.pyc
 
 # Configuration du système d'exploitation
 .DS_Store
@@ -36,10 +37,21 @@ Thumbs.db
 *.asc
 *.grd
 *.vrt
+*.tif.aux.xml
+
+# Types de fichiers shp
+*.cpg
+*.dbf
+*.prj
+*.qix
+*.shp
+*.shx
+*.sld
 
 # QGIS
 *.qgs~
 *.qgz~
+*.qgz
 
 # Fichiers spécifiques
 ChatGPT.md

@@ -11,6 +11,7 @@ yarn-debug.log*
 yarn-error.log*
 *.pyc
 
+
 # Configuration du système d'exploitation
 .DS_Store
 Thumbs.db
@@ -24,7 +25,6 @@ Thumbs.db
 *.tmp
 *.bak
 *.log
-
 
 # Types de fichier raster
 *.tiff
@@ -57,3 +57,7 @@ Thumbs.db
 ChatGPT.md
 git-setup.md
 UE902-1_Webmapping_sujet_2024-25.pdf
+Webmapping.code-workspace
+
+# Folders
+__pycache__/

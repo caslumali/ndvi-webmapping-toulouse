@@ -1,7 +1,10 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from "vite"; // Importation de la configuration Vite
+import vue from "@vitejs/plugin-vue"; // Importation du plugin Vue pour Vite
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-})
+  plugins: [vue()], // Activation du plugin Vue
+  base: "./", // Chemin de base pour la production
+  server: {
+    port: 5173, // Définition du port local
+  },
+});

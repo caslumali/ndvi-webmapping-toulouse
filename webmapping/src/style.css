@@ -1,79 +1,69 @@
+/* Définition des variables globales de style */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: Arial, sans-serif;
+  color: rgba(255, 255, 255, 0.87); /* Couleur claire pour le texte */
+  background-color: #1e1e1e; /* Fond sombre */
 }
 
+/* Style pour les liens */
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #646cff; /* Couleur principale des liens */
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #535bf2; /* Couleur au survol */
 }
 
+/* Style global pour le corps de la page */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
+  background-color: var(--background-color); /* Couleur de fond */
+  color: var(--color); /* Couleur du texte */
 }
 
+/* Style pour le titre principal */
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  text-align: center;       /* Centrage horizontal */
+  color: #00d1b2;           /* Couleur verte pour le titre */
+  margin-top: 20px;         /* Espacement supérieur */
 }
 
+/* Style pour le conteneur de la carte */
+#map {
+  height: 80vh; /* Hauteur dynamique */
+  width: 100%;  /* Largeur complète */
+  margin: 20px auto; /* Centrer horizontalement */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Ombre légère */
+}
+
+/* Style pour les boutons */
 button {
-  border-radius: 8px;
+  border-radius: 8px;       /* Coins arrondis */
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #1a1a1a; /* Couleur sombre */
+  color: #fff;              /* Texte clair */
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s; /* Transition fluide */
 }
 button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  border-color: #646cff; /* Bordure colorée au survol */
 }
 
-.card {
-  padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
+/* Style pour les mises en page réactives */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #ffffff; /* Fond clair pour le mode clair */
   }
   a:hover {
-    color: #747bff;
+    color: #747bff; /* Couleur au survol */
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #f9f9f9; /* Couleur des boutons */
   }
 }

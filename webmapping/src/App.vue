@@ -2,7 +2,7 @@
   <!-- Conteneur principal de l'application -->
   <div id="app">
     <!-- Titre de l'application -->
-    <h1>NDVI Webmapping</h1>
+    <h1>Analyse du NDVI et classification de la végétation à l’aide d’images Sentinel-2</h1>
     <!-- Inclusion du composant MapView -->
     <MapView />
   </div>

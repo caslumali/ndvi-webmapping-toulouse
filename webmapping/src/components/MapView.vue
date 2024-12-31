@@ -1,192 +1,128 @@
 <template>
-    <div id="map-container">
-      <div id="map"></div>
+    <div id="map-view">
+      <!-- Conteneur principal : la carte + les contrôles + le graphique NDVI -->
+      <div class="main-container">
+        
+        <!-- La carte Leaflet -->
+        <MapContainer
+          ref="mapContainerRef"
+          @ndvi-values="handleNdviValues"
+        />
   
-      <!-- Contrôle des couches -->
-      <div id="layer-controls">
-        <h3>Contrôle des Couches</h3>
-        <!-- Sélection du fond -->
-        <div>
-          <label>
-            <input type="radio" name="baseLayer" value="darkMatter" @change="changeBaseLayer('darkMatter')" checked />
-            Fond Sombre
-          </label>
-          <label>
-            <input type="radio" name="baseLayer" value="worldImagery" @change="changeBaseLayer('worldImagery')" />
-            Imagerie Satellitaire
-          </label>
-        </div>
-        <hr />
-        <!-- Couches supplémentaires -->
-        <div>
-          <input type="checkbox" id="bdForet" v-model="showBdForet" />
-          <label for="bdForet">BD Forêt</label>
-        </div>
-        <div>
-          <input type="checkbox" id="ndvi" v-model="showNdvi" />
-          <label for="ndvi">NDVI</label>
-        </div>
-        <!-- Barre des mois NDVI -->
-        <div v-if="showNdvi" id="slider-container">
-          <label for="slider">Sélectionnez le Mois :</label>
-          <input type="range" id="slider" min="0" max="5" step="1" v-model="selectedMonth" />
-          <span>{{ ndviMonths[selectedMonth] }}</span>
-        </div>
+        <!-- Contrôles : fond de carte, BD Forêt, NDVI, slider -->
+        <LayerControls
+          @toggle-base-layer="handleToggleBaseLayer"
+          @toggle-bd-foret="handleToggleBdForet"
+          @toggle-ndvi="handleToggleNdvi"
+          @change-ndvi-month="handleChangeNdviMonth"
+        />
+  
+        <!-- Graphique NDVI (affiché seulement si showChart = true) -->
+        <!-- :key pour forcer la mise à jour quand essence/ndviValues/error changent -->
+        <NdviChart
+          v-if="showChart"
+          :key="essenceName + JSON.stringify(ndviValues) + chartErrorMessage"
+          :ndvi-values="ndviValues"
+          :months="ndviMonths"
+          :essence="essenceName"
+          :errorMessage="chartErrorMessage"
+          @close-chart="showChart = false"
+        />
       </div>
     </div>
   </template>
   
   <script>
-  import L from "leaflet";
+  /*
+    Composant parent qui orchestre :
+      - La carte (MapContainer.vue),
+      - Les contrôles (LayerControls.vue),
+      - Le graphique NDVI (NdviChart.vue).
+  
+    Quand on clique sur la carte, MapContainer émet "ndvi-values".
+    MapView gère la logique d'erreur ou de success pour les valeurs NDVI 
+    et affiche NdviChart en conséquence.
+  */
+  
+  import MapContainer from "./MapContainer.vue";
+  import LayerControls from "./LayerControls.vue";
+  import NdviChart from "./NdviChart.vue";
   
   export default {
+    name: "MapView",
+  
+    components: {
+      MapContainer,
+      LayerControls,
+      NdviChart,
+    },
+  
     data() {
       return {
-        map: null,
-        ndviLayers: [],
-        bdForetLayer: null,
-        selectedMonth: 0,
-        showNdvi: false,
-        showBdForet: true,
+        // Affiche ou non le composant NdviChart
+        showChart: false,
+  
+        // Valeurs NDVI récupérées (6 mois)
+        ndviValues: [],
+  
+        // Nom de l'essence (BD Forêt)
+        essenceName: "",
+  
+        // Noms des 6 mois (affichage X)
         ndviMonths: [
-          "Février 2022",
-          "Mars 2022",
-          "Avril 2022",
-          "Juillet 2022",
-          "Septembre 2022",
-          "Novembre 2022",
+          "Févr.",
+          "Mars",
+          "Avr.",
+          "Juil.",
+          "Sept.",
+          "Nov.",
         ],
-        geoserverUrl: "https://www.geotests.net/geoserver/ows",
-        baseLayers: {},
-        currentBaseLayer: null,
+  
+        // Message d'erreur si pixel invalide
+        chartErrorMessage: "",
       };
     },
-    watch: {
-      showBdForet(newVal) {
-        if (newVal) {
-          this.bdForetLayer.addTo(this.map);
-        } else {
-          this.map.removeLayer(this.bdForetLayer);
-        }
-      },
-      showNdvi() {
-        this.updateNdviLayer();
-      },
-      selectedMonth() {
-        this.updateNdviLayer();
-      },
-    },
-    mounted() {
-      this.initMap();
-      this.addFixedLayers();
-      this.initBdForet();
-      this.initNdviLayers();
-    },
+  
     methods: {
-      initMap() {
-        const centerCoordinates = [43.5615, 1.1194];
-        const bounds = L.latLngBounds([43.24, 0.56], [43.92, 1.89]);
-  
-        this.map = L.map("map", {
-          center: centerCoordinates,
-          zoom: 10,
-          maxBounds: bounds,
-          maxZoom: 17,
-          minZoom: 9,
-        });
-  
-        // Couche de base par défaut
-        this.baseLayers.darkMatter = L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-          {
-            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-            subdomains: "abcd",
-            maxZoom: 20,
-          }
-        );
-  
-        this.baseLayers.worldImagery = L.tileLayer(
-          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-          {
-            attribution: "Tiles © Esri, Source: Esri, USGS, IGN",
-          }
-        );
-  
-        this.currentBaseLayer = this.baseLayers.darkMatter;
-        this.currentBaseLayer.addTo(this.map);
-      },
-      changeBaseLayer(layerKey) {
-        // Vérifie si une couche de fond est déjà active
-        if (this.currentBaseLayer) {
-            this.map.removeLayer(this.currentBaseLayer); // Retirer la couche de fond actuelle
-        }
-
-        // Met à jour la couche de fond actuelle avec la nouvelle sélectionnée
-        this.currentBaseLayer = this.baseLayers[layerKey];
-        this.currentBaseLayer.addTo(this.map); // Ajoute la nouvelle couche de fond à la carte
-
-        // Ré-ajouter les couches fixes (Emprise et Emprise Inversée) après changement de fond
-        this.addFixedLayers();
-
-        // Ré-ajouter BD Forêt pour garantir qu'elle reste visible au-dessus du fond
-        if (this.showBdForet && this.bdForetLayer) {
-            this.map.removeLayer(this.bdForetLayer); // Supprime temporairement la couche
-            this.bdForetLayer.addTo(this.map);      // La ré-ajoute pour la placer au-dessus
-        }
-
-        // Ré-ajouter NDVI si actif
-        if (this.showNdvi) {
-            this.updateNdviLayer();
+      /*
+        handleNdviValues(payload) est déclenché par l'événement 
+        @ndvi-values émis par MapContainer quand on clique sur la carte.
+      */
+      handleNdviValues(payload) {
+        // S'il y a un pixel invalide => payload.errorMessage
+        if (payload.errorMessage) {
+          // On stocke l'erreur
+          this.chartErrorMessage = payload.errorMessage;
+          // On vide NDVI + essence
+          this.ndviValues = [];
+          this.essenceName = "";
+          // On montre le chart (qui affichera juste le message d'erreur)
+          this.showChart = true;
+        } else {
+          // Sinon, c'est un pixel valide
+          this.chartErrorMessage = "";
+          this.essenceName = payload.essence || "Essence inconnue";
+          this.ndviValues = payload.values || [];
+          // On ouvre le graphique
+          this.showChart = true;
         }
       },
-
-      addFixedLayers() {
-        L.tileLayer.wms(this.geoserverUrl, {
-          layers: "lima:emprise_inversee",
-          format: "image/png",
-          transparent: true,
-        }).addTo(this.map);
   
-        L.tileLayer.wms(this.geoserverUrl, {
-          layers: "lima:emprise",
-          format: "image/png",
-          transparent: true,
-        }).addTo(this.map);
+      // Changement de fond
+      handleToggleBaseLayer(baseLayerKey) {
+        this.$refs.mapContainerRef.changeBaseLayer(baseLayerKey);
       },
-      initBdForet() {
-        this.bdForetLayer = L.tileLayer.wms(this.geoserverUrl, {
-          layers: "lima:Sample_BD_foret_3857",
-          format: "image/png",
-          transparent: true,
-        });
-        if (this.showBdForet) {
-          this.bdForetLayer.addTo(this.map);
-        }
+      // BD Forêt ON/OFF
+      handleToggleBdForet(show) {
+        this.$refs.mapContainerRef.toggleBdForet(show);
       },
-      initNdviLayers() {
-        const months = [
-          "lima:S2_NDVI_02-2022",
-          "lima:S2_NDVI_03-2022",
-          "lima:S2_NDVI_04-2022",
-          "lima:S2_NDVI_07-2022",
-          "lima:S2_NDVI_09-2022",
-          "lima:S2_NDVI_11-2022",
-        ];
-  
-        months.forEach((layerName) => {
-          const layer = L.tileLayer.wms(this.geoserverUrl, {
-            layers: layerName,
-            format: "image/png",
-            transparent: true,
-          });
-          this.ndviLayers.push(layer);
-        });
+      // NDVI ON/OFF
+      handleToggleNdvi(show) {
+        this.$refs.mapContainerRef.toggleNdvi(show);
       },
-      updateNdviLayer() {
-        this.ndviLayers.forEach((layer) => this.map.removeLayer(layer));
-        if (this.showNdvi) {
-          this.ndviLayers[this.selectedMonth].addTo(this.map);
-        }
+      // Mois NDVI
+      handleChangeNdviMonth(selectedMonth) {
+        this.$refs.mapContainerRef.updateNdviMonth(selectedMonth);
       },
     },
   };

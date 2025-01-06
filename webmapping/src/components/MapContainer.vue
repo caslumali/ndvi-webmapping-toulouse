@@ -71,7 +71,7 @@
           zoom: 10,
           maxBounds: bounds,
           maxZoom: 17,
-          minZoom: 9,
+          minZoom: 10,
         });
   
         // Fond sombre (darkMatter)

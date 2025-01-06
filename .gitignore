@@ -47,6 +47,8 @@ Thumbs.db
 *.shp
 *.shx
 *.sld
+*.qmd
+
 
 # QGIS
 *.qgs~

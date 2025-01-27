@@ -1,19 +1,25 @@
 <template>
-  <!-- Conteneur principal de l'application -->
   <div id="app">
-    <!-- Titre de l'application -->
     <h1>Analyse spatio-temporelle du NDVI pour l'année 2022 avec Sentinel-2</h1>
-    <!-- Inclusion du composant MapView -->
     <MapView />
+    <InfoBox v-if="showInfo" @close-info="showInfo = false" />
   </div>
 </template>
 
 <script>
-  import MapView from "./components/MapView.vue";
+import MapView from "./components/MapView.vue";
+import InfoBox from "./components/InfoBox.vue";
 
-  export default {
-    components: {
-      MapView, // Déclaration du composant de la carte
-    },
-  };
+export default {
+  name: "App",
+  components: {
+    MapView,
+    InfoBox,
+  },
+  data() {
+    return {
+      showInfo: true, // Afficher INFO au chargement
+    };
+  },
+};
 </script>

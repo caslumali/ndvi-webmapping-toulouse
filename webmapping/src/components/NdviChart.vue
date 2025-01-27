@@ -124,12 +124,14 @@
                 },
               },
               y: {
+                min: 0.3,
+                max: 1,
                 ticks: { color: "#ccc" },
-                title: {
-                  display: true,
-                  text: "Valeurs du NDVI",
-                  color: "#ccc",
-                  padding: { top: 5, bottom: 5 },
+                  title: {
+                    display: true,
+                    text: "Valeurs du NDVI",
+                    color: "#ccc",
+                    padding: { top: 5, bottom: 5 },
                 },
               },
             },

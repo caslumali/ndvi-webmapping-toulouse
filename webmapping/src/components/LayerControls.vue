@@ -2,68 +2,67 @@
   <div id="layer-controls">
     <h3>Contrôle des couches</h3>
 
-    <!-- Choix du fond de carte -->
-    <div>
-      <label>
-        <input
-          type="radio"
-          name="baseLayer"
-          value="darkMatter"
-          @change="changeBaseLayer('darkMatter')"
-          checked
-        />
-        Carto Sombre
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="baseLayer"
-          value="worldImagery"
-          @change="changeBaseLayer('worldImagery')"
-        />
-        Esri Satellite
-      </label>
-    </div>
-
-    <hr />
-
     <!-- BD Forêt -->
     <div>
-      <input
-        type="checkbox"
-        id="bdForet"
-        v-model="localShowBdForet"
-        @change="toggleBdForet"
-      />
-      <label for="bdForet">BD Forêt</label>
-
-      <div v-if="localShowBdForet" class="legend">
-        <!-- Légende BD Forêt, texte noir (fontColor:0x000000) -->
-        <img
-          :src="bdForetLegendUrl"
-          alt="Légende BD Forêt"
-          class="legend-image"
+      <label>
+        <input
+          type="checkbox"
+          v-model="localShowBdForet"
+          @change="handleBdForetChange"
         />
+        BD Forêt
+      </label>
+      <div v-if="localShowBdForet" class="legend">
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #009067;"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BD Forêt (par peuplement) -->
+    <div>
+      <label>
+        <input
+          type="checkbox"
+          v-model="localShowBdForetStyled"
+          @change="handleBdForetStyledChange"
+        />
+        BD Forêt (par peuplement)
+      </label>
+      <div v-if="localShowBdForetStyled" class="legend">
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #33a02c;"></span>
+          <span class="legend-label">Résineux</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #b0ad00;"></span>
+          <span class="legend-label">Feuillus</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #eea83f;"></span>
+          <span class="legend-label">Mélanges (résineux et feuillus)</span>
+        </div>
       </div>
     </div>
 
     <!-- NDVI -->
     <div>
-      <input
-        type="checkbox"
-        id="ndvi"
-        v-model="localShowNdvi"
-        @change="toggleNdvi"
-      />
-      <label for="ndvi">NDVI</label>
-
-      <div v-if="localShowNdvi" class="legend">
-        <!-- Légende NDVI, dépend du mois sélectionné (texte noir) -->
-        <img
-          :src="ndviLegendUrl + '&t=' + Date.now()"
-          class="legend-image"
-          alt="Légende NDVI"
+      <label>
+        <input
+          type="checkbox"
+          v-model="localShowNdvi"
+          @change="toggleNdvi"
         />
+        NDVI 2022
+      </label>
+      <div v-if="localShowNdvi" class="legend">
+        <div class="legend-item">
+          <img
+          :src="ndviLegendUrl + '&t=' + Date.now()"
+          alt="Légende NDVI"
+          class="legend-image"
+        />
+        </div>
       </div>
     </div>
 
@@ -85,24 +84,14 @@
 </template>
 
 <script>
-/*
-  Composant Vue qui gère :
-  - La sélection du fond (radio)
-  - L'activation BD Forêt / NDVI (checkbox)
-  - Le slider NDVI (mois)
-  - Les légendes WMS (BD Forêt, NDVI) avec paramètre "fontColor=0x000000" pour voir les chiffres
-*/
-
 export default {
   name: "LayerControls",
-
   data() {
     return {
-      localShowBdForet: true,    // On stocke en local l'état BD Forêt
-      localShowNdvi: false,      // On stocke en local l'état NDVI
-      selectedMonth: 0,          // Mois NDVI
-
-      // Noms des mois (pour affichage)
+      localShowBdForet: true, // Initialement activé
+      localShowBdForetStyled: false, // Désactivé par défaut
+      localShowNdvi: false, // Désactivé par défaut
+      selectedMonth: 0,
       ndviMonths: [
         "Février 2022",
         "Mars 2022",
@@ -113,38 +102,17 @@ export default {
       ],
     };
   },
-
   computed: {
-    // URL Geoserver
     geoserverUrl() {
       return "https://www.geotests.net/geoserver/ows";
     },
-
-    // Nom de la couche BD Forêt
-    bdForetLayerName() {
-      return "lima:Sample_BD_foret_3857";
-    },
-
-    /*
-      URL de GetLegendGraphic pour BD Forêt
-      On force backgroundColor:0x333333, 
-      ET fontColor:0x000000 (texte noir)
-    */
     bdForetLegendUrl() {
-      return (
-        this.geoserverUrl +
-        `?service=WMS&request=GetLegendGraphic&format=image/png` +
-        `&layer=${this.bdForetLayerName}` +
-        `&LEGEND_OPTIONS=fontColor:0x000000;backgroundColor:0x333333;forceLabels:off;forceTitles:off`
-      );
+      return `${this.geoserverUrl}?service=WMS&request=GetLegendGraphic&format=image/png&layer=lima:Sample_BD_foret_3857&LEGEND_OPTIONS=fontColor:0x000000;backgroundColor:0x333333;forceLabels:off;`;
     },
-
-    /*
-      URL de GetLegendGraphic pour NDVI (dépend du selectedMonth)
-      Même principe : texte noir
-    */
+    bdForetStyledLegendUrl() {
+      return `${this.geoserverUrl}?service=WMS&request=GetLegendGraphic&format=image/png&layer=lima:Sample_BD_foret_3857&style=lima:Sample_BD_Foret_essences_style&LEGEND_OPTIONS=fontColor:0x000000;backgroundColor:0x333333;forceLabels:on;forceTitles:on;fontSize:50&height=100&width=160`;
+    },
     ndviLegendUrl() {
-      // On associe l'indice de selectedMonth à une couche NDVI
       const ndviLayerNames = [
         "lima:S2_NDVI_02-2022",
         "lima:S2_NDVI_03-2022",
@@ -154,36 +122,38 @@ export default {
         "lima:S2_NDVI_11-2022",
       ];
       const currentLayer = ndviLayerNames[this.selectedMonth];
-
-      return (
-        this.geoserverUrl +
-        `?service=WMS&request=GetLegendGraphic&format=image/png` +
-        `&layer=${currentLayer}` +
-        `&LEGEND_OPTIONS=fontColor:0x000000;backgroundColor:0x333333;forceLabels:on;forceTitles:on`
-      );
+      return `${this.geoserverUrl}?service=WMS&request=GetLegendGraphic&format=image/png&layer=${currentLayer}&LEGEND_OPTIONS=fontColor:0x000000;backgroundColor:0x333333;forceLabels:on;forceTitles:on;fontSize:12`;
     },
   },
-
   methods: {
-    /* Émet un événement pour changer le fond de carte */
-    changeBaseLayer(layerKey) {
-      this.$emit("toggle-base-layer", layerKey);
-    },
-
-    /* Émet un événement pour activer/désactiver BD Forêt */
-    toggleBdForet() {
+    // Gère l'activation/désactivation de BD Forêt
+    handleBdForetChange() {
+      if (this.localShowBdForet) {
+        this.localShowBdForetStyled = false; // Désactiver "BD Forêt (par peuplement)"
+        this.$emit("toggle-bd-foret-styled", false); // Émettre la désactivation
+      }
       this.$emit("toggle-bd-foret", this.localShowBdForet);
     },
 
-    /* Émet un événement pour activer/désactiver NDVI */
+    // Gère l'activation/désactivation de BD Forêt (par peuplement)
+    handleBdForetStyledChange() {
+      if (this.localShowBdForetStyled) {
+        this.localShowBdForet = false; // Désactiver "BD Forêt"
+        this.$emit("toggle-bd-foret", false); // Émettre la désactivation
+      }
+      this.$emit("toggle-bd-foret-styled", this.localShowBdForetStyled);
+    },
+
+    // Gère l'activation/désactivation de NDVI
     toggleNdvi() {
       this.$emit("toggle-ndvi", this.localShowNdvi);
     },
 
-    /* Mise à jour du mois NDVI (slider) */
+    // Met à jour le mois pour NDVI
     updateNdviMonth() {
       this.$emit("change-ndvi-month", this.selectedMonth);
     },
   },
 };
 </script>
+

@@ -51,6 +51,10 @@ export default {
         => "lima:SerieTemp_NDVI_2022"
       */
       ndviMultiBandLayerName: "lima:SerieTemp_NDVI_2022",
+
+      // Position et zoom initial
+      initialCenter: [43.5615, 1.1194], // Coordenadas iniciais
+      initialZoom: 10, // Nível de zoom inicial
     };
   },
 
@@ -69,12 +73,11 @@ export default {
       Création de la carte Leaflet
     */
     initMap() {
-      const centerCoordinates = [43.5615, 1.1194];
       const bounds = L.latLngBounds([43.24, 0.56], [43.92, 1.89]);
 
       this.map = L.map("map", {
-        center: centerCoordinates,
-        zoom: 10,
+        center: this.initialCenter, // Utilizar center inicial
+        zoom: this.initialZoom, // Utilizar zoom inicial
         maxBounds: bounds,
         maxZoom: 17,
         minZoom: 10,
@@ -255,6 +258,27 @@ export default {
     },
 
     /*
+      Méthode pour zoomer la carte
+    */
+    zoomInMap() {
+      this.map.zoomIn(); // Augmente le niveau de zoom de 1
+    },
+
+    /*
+      Méthode pour dézoomer la carte
+    */
+    zoomOutMap() {
+      this.map.zoomOut(); // Diminue le niveau de zoom de 1
+    },
+
+    /*
+      Méthode pour réinitialiser le zoom et la position du mapa
+    */
+    resetZoomMap() {
+      this.map.setView(this.initialCenter, this.initialZoom); // Définit le centro e zoom iniciais
+    },
+
+    /*
       Requête WMS GetFeatureInfo pour un layer + latlng
     */
     async doGetFeatureInfo(layerName, latlng) {
@@ -309,7 +333,6 @@ export default {
         2) Multi-bande -> 6 bands
         => On émet "ndvi-values" au parent
     */
-      // ... on clique ...
     addClickListener() {
       this.map.on("click", async (e) => {
         const zoomLevel = this.map.getZoom();

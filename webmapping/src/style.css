@@ -188,10 +188,55 @@ button:hover {
   width: 240px;
 }
 
+/* Conteneur des boutons de zoom */
+.zoom-controls {
+  position: absolute;
+  top: 3px; /* Position verticale par rapport au conteneur des contrôles de couches */
+  left: -35px; /* Position horizontale pour les placer à l'extérieur du conteneur */
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Espacement entre les boutons */
+}
+
+/* Styles individuels des boutons de zoom */
+.zoom-button {
+  width: 30px;
+  height: 30px;
+  background-color: rgba(0, 90, 77, 0.4); /* Couleur de fond personnalisée */
+  color: #dbdbdb; /* Couleur du texte */
+  border: none;
+  border-radius: 50%; /* Boutons circulaires */
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Effet au survol des boutons de zoom */
+.zoom-button:hover {
+  background-color: rgba(0, 90, 77, 0.6);
+  transform: scale(1.1); /* Agrandir légèrement au survol */
+}
+
+/* Bouton de Reset Zoom */
+.reset-zoom-button {
+  background-color: rgba(0, 90, 77, 0.4); /* Couleur différente pour distinguer o botão de reset */
+  font-size: 20px;
+}
+
+/* Effet spécifique au bouton de Reset Zoom au survol */
+.reset-zoom-button:hover {
+  background-color: rgba(0, 90, 77, 0.6);
+  transform: scale(1.1); /* Agrandir légèrement au survol */
+}
+
 #layer-controls h3 {
   margin: 0 0 10px;
   font-size: 16px;
-  color: #00d1b2;
+  color: hwb(171 0% 18%);
 }
 
 #layer-controls label {

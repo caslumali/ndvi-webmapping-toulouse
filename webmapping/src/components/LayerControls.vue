@@ -1,5 +1,6 @@
 <template>
-  <div id="layer-controls">
+  <!-- Conteneur principal des contrôles de couches -->
+  <div id="layer-controls" class="layer-controls">
     <h3>Contrôle des couches</h3>
 
     <!-- BD Forêt -->
@@ -58,10 +59,10 @@
       <div v-if="localShowNdvi" class="legend">
         <div class="legend-item">
           <img
-          :src="ndviLegendUrl + '&t=' + Date.now()"
-          alt="Légende NDVI"
-          class="legend-image"
-        />
+            :src="ndviLegendUrl + '&t=' + Date.now()"
+            alt="Légende NDVI"
+            class="legend-image"
+          />
         </div>
       </div>
     </div>
@@ -80,6 +81,22 @@
       />
       <span>{{ ndviMonths[selectedMonth] }}</span>
     </div>
+
+    <!-- Boutons de Zoom In, Zoom Out et Reset Zoom -->
+    <div class="zoom-controls">
+      <!-- Bouton de Zoom In -->
+      <button @click="zoomIn" class="zoom-button" aria-label="Zoomer">
+        <i class="fas fa-plus"></i> <!-- Icone Font Awesome pour Zoom In -->
+      </button>
+      <!-- Bouton de Zoom Out -->
+      <button @click="zoomOut" class="zoom-button" aria-label="Dézoomer">
+        <i class="fas fa-minus"></i> <!-- Icone Font Awesome pour Zoom Out -->
+      </button>
+      <!-- Bouton de Reset Zoom -->
+      <button @click="resetZoom" class="zoom-button reset-zoom-button" aria-label="Réinitialiser le Zoom">
+        <i class="fas fa-home"></i> <!-- Icone Font Awesome para Reset Zoom -->
+      </button>
+    </div>
   </div>
 </template>
 
@@ -88,10 +105,10 @@ export default {
   name: "LayerControls",
   data() {
     return {
-      localShowBdForet: true, // Initialement activé
-      localShowBdForetStyled: false, // Désactivé par défaut
-      localShowNdvi: false, // Désactivé par défaut
-      selectedMonth: 0,
+      localShowBdForet: true, // BD Forêt initialement activé
+      localShowBdForetStyled: false, // BD Forêt (par peuplement) désactivé par défaut
+      localShowNdvi: false, // NDVI désactivé par défaut
+      selectedMonth: 0, // Mois NDVI sélectionné
       ndviMonths: [
         "Février 2022",
         "Mars 2022",
@@ -129,7 +146,7 @@ export default {
     // Gère l'activation/désactivation de BD Forêt
     handleBdForetChange() {
       if (this.localShowBdForet) {
-        this.localShowBdForetStyled = false; // Désactiver "BD Forêt (par peuplement)"
+        this.localShowBdForetStyled = false; // Désactiver BD Forêt (par peuplement)
         this.$emit("toggle-bd-foret-styled", false); // Émettre la désactivation
       }
       this.$emit("toggle-bd-foret", this.localShowBdForet);
@@ -138,7 +155,7 @@ export default {
     // Gère l'activation/désactivation de BD Forêt (par peuplement)
     handleBdForetStyledChange() {
       if (this.localShowBdForetStyled) {
-        this.localShowBdForet = false; // Désactiver "BD Forêt"
+        this.localShowBdForet = false; // Désactiver BD Forêt
         this.$emit("toggle-bd-foret", false); // Émettre la désactivation
       }
       this.$emit("toggle-bd-foret-styled", this.localShowBdForetStyled);
@@ -152,6 +169,24 @@ export default {
     // Met à jour le mois pour NDVI
     updateNdviMonth() {
       this.$emit("change-ndvi-month", this.selectedMonth);
+    },
+
+    // Méthode pour zoomer
+    zoomIn() {
+      // Émettre un événement 'zoom-in' vers le parent
+      this.$emit("zoom-in");
+    },
+
+    // Méthode pour dézoomer
+    zoomOut() {
+      // Émettre un événement 'zoom-out' vers le parent
+      this.$emit("zoom-out");
+    },
+
+    // Méthode pour réinitialiser le zoom
+    resetZoom() {
+      // Émettre un événement 'reset-zoom' vers le parent
+      this.$emit("reset-zoom");
     },
   },
 };

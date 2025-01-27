@@ -9,13 +9,16 @@
         @ndvi-values="handleNdviValues"
       />
 
-      <!-- Contrôles : fond de carte, BD Forêt, NDVI, slider -->
+      <!-- Contrôles : fond de carte, BD Forêt, NDVI, slider, Zoom -->
       <LayerControls
         @toggle-base-layer="handleToggleBaseLayer"
         @toggle-bd-foret="handleToggleBdForet"
         @toggle-bd-foret-styled="handleToggleBdForetStyled"
         @toggle-ndvi="handleToggleNdvi"
         @change-ndvi-month="handleChangeNdviMonth"
+        @zoom-in="handleZoomIn"      
+        @zoom-out="handleZoomOut"    
+        @reset-zoom="handleResetZoom" 
       />
 
       <!-- Graphique NDVI (affiché seulement si showChart = true) -->
@@ -132,6 +135,21 @@ export default {
     // Mois NDVI
     handleChangeNdviMonth(selectedMonth) {
       this.$refs.mapContainerRef.updateNdviMonth(selectedMonth);
+    },
+
+    // Gestion de l'événement de Zoom In
+    handleZoomIn() {
+      this.$refs.mapContainerRef.zoomInMap();
+    },
+
+    // Gestion de l'événement de Zoom Out
+    handleZoomOut() {
+      this.$refs.mapContainerRef.zoomOutMap();
+    },
+
+    // Gestion de l'événement de Reset Zoom
+    handleResetZoom() {
+      this.$refs.mapContainerRef.resetZoomMap();
     },
   },
 };

@@ -49,6 +49,9 @@ Thumbs.db
 *.sld
 *.qmd
 
+# Types de fichiers text
+*.docx
+*.pdf
 
 # QGIS
 *.qgs~
@@ -65,4 +68,3 @@ Webmapping.code-workspace
 # Folders
 __pycache__/
 
-*.docx

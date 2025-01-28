@@ -64,3 +64,5 @@ Webmapping.code-workspace
 
 # Folders
 __pycache__/
+
+*.docx

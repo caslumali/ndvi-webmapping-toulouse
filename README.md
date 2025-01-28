@@ -31,7 +31,7 @@ Ce projet a été réalisé dans le cadre de l'UE 902-1, **WebMapping**, du Mast
 
 ### **Côté client :**
 - **Framework :** Vue.js
-- **Build tool :** Vite (pour le développement rapide).
+- **Build tool :** Vite (pour le développement et la construction optimisée).
 - **Bibliothèque de cartographie :** Leaflet.js
 - **Node.js :** Gestion des dépendances et outils de développement.
 - **Styles :** CSS personnalisé (mode sombre).

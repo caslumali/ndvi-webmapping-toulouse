@@ -1,5 +1,10 @@
 # NDVI Spatio-Temporal Analysis — WebMapping (2022)
 
+![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=flat&logo=vuedotjs&logoColor=white)
+![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=flat&logo=leaflet&logoColor=white)
+![GeoServer](https://img.shields.io/badge/GeoServer-4285F4?style=flat)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
+
 > Full-stack WebGIS application for exploring Sentinel-2 NDVI time series over the Toulouse region. Built with Vue.js, Leaflet, and GeoServer WMS services.
 >
 > Developed as part of the SIGMA Master's program (UE 902-1 WebMapping), Université Toulouse 2 Jean Jaurès / Agro Toulouse.

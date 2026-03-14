@@ -13,6 +13,12 @@
 
 **Tech stack:** Vue.js · Vite · Leaflet.js · GeoServer · Node.js
 
+---
+
+*The detailed documentation below is in French, as originally written for the course.*
+
+---
+
 # **Analyse Spatio-Temporelle du NDVI - 2022**
 
 ## 🌍 **Contexte**

@@ -1,148 +1,72 @@
-# NDVI Spatio-Temporal Analysis — WebMapping (2022)
+# NDVI WebMapping Toulouse
+
+WebGIS application for exploring Sentinel-2 NDVI time series in the Toulouse region using Vue, Leaflet, and GeoServer.
 
 ![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=flat&logo=vuedotjs&logoColor=white)
 ![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=flat&logo=leaflet&logoColor=white)
 ![GeoServer](https://img.shields.io/badge/GeoServer-4285F4?style=flat)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
 
-> Full-stack WebGIS application for exploring Sentinel-2 NDVI time series over the Toulouse region. Built with Vue.js, Leaflet, and GeoServer WMS services.
->
-> Developed as part of the SIGMA Master's program (UE 902-1 WebMapping), Université Toulouse 2 Jean Jaurès / Agro Toulouse.
+---
 
-**Key features:**
-- GeoServer WMS publication of BD Forêt and monthly NDVI rasters
-- Interactive temporal slider for NDVI months
-- Pixel-level NDVI querying with charts
-- Dark mode interface
-- Vue.js component architecture (LayerControls, MapContainer, NdviChart, InfoBox)
+## Overview
 
-**Tech stack:** Vue.js · Vite · Leaflet.js · GeoServer · Node.js
+This project is a full-stack WebGIS application designed to explore monthly NDVI layers derived from Sentinel-2 imagery over the Toulouse region.
+
+The application combines:
+
+- a GeoServer backend publishing raster and vector layers as WMS
+- a Vue frontend for interface logic
+- Leaflet for interactive mapping
+- temporal NDVI exploration through a month slider and pixel querying
 
 ---
 
-*The detailed documentation below is in French, as originally written for the course.*
+## Main features
+
+- visualization of monthly NDVI layers
+- interactive temporal slider
+- pixel-level NDVI querying
+- chart display for selected locations
+- BD Forêt context layers
+- dark interface theme
 
 ---
 
-# **Analyse Spatio-Temporelle du NDVI - 2022**
+## Tech stack
 
-## 🌍 **Contexte**
-Ce projet a été réalisé dans le cadre de l'UE 902-1, **WebMapping**, du Master SIGMA 2024. Il vise à développer une solution complète de **webmapping** en appliquant les compétences acquises, couvrant tout le cycle de production :
-1. Publication des données géospatiales via un serveur GeoServer.
-2. Développement d'une interface web interactive pour la visualisation et l'analyse des données.
+- **Vue.js** and **Vite**
+- **Leaflet**
+- **GeoServer**
+- **Node.js**
 
+---
 
+## Repository structure
 
-## 🌐 **Lien vers l'application**
-[Accéder à l'application WebMapping](https://caslumali.alwaysdata.net/webmapping/)
-
-
-
-## 🎯 **Objectifs**
-- Mettre en œuvre un **webservice WMS** (avec GeoServer) à partir d'une carte géoréférencée produite dans l'UE 901-21 (*Traitement d'image satellite*).
-- Consommer ce service via une interface web interactive développée avec des solutions **open source**.
-- Offrir des fonctionnalités d'exploration et d'interrogation claires et ergonomiques.
-
-
-
-## 🛠️ **Technologies utilisées**
-### **Côté serveur :**
-- **GeoServer :** Publication des données en services WMS standard.
-- **Données publiées :**
-  - **BD Forêt :** Représentation des forêts (style par défaut et par peuplement).
-  - **NDVI (6 mois de 2022) :** Indices de végétation calculés à partir d'images Sentinel-2.
-  - **Emprise et emprise inversée :** Couches pour contextualiser la carte.
-
-### **Côté client :**
-- **Framework :** Vue.js
-- **Build tool :** Vite (pour le développement et la construction optimisée).
-- **Bibliothèque de cartographie :** Leaflet.js
-- **Node.js :** Gestion des dépendances et outils de développement.
-- **Styles :** CSS personnalisé (mode sombre).
-- **Composants principaux :**
-  - `LayerControls.vue` : Contrôle des couches (activation/désactivation, slider NDVI).
-  - `InfoBox.vue` : Présentation contextuelle des objectifs du projet.
-  - `NdviChart.vue` : Graphiques interactifs NDVI.
-  - `MapContainer.vue` : Gestion principale de la carte et des interactions.
-
-
-## 🌟 **Fonctionnalités actuelles**
-1. **Visualisation des couches géospatiales :**
-   - BD Forêt (style par défaut et par peuplement).
-   - NDVI (6 mois temporels de 2022).
-2. **Interrogation des données :**
-   - Affichage des types de essences.
-   - Lecture des indices NDVI en cliquant sur un pixel de la carte.
-3. **Interface interactive :**
-   - Slider temporel pour changer les mois NDVI.
-   - Navigation avec controle du zoom.
-   - Présentation des informations dans une boîte INFO.
-4. **Personnalisation de l'interface :**
-   - Mode sombre pour les légendes et l'ensemble de l'application.
-
-
-## 💡 **Choix méthodologiques**
-1. **Pourquoi Vue.js ?**
-   - Framework réactif et performant, facilitant le développement d'interfaces complexes et modulaires.
-2. **Pourquoi Leaflet.js ?**
-   - Solution légère et efficace pour la visualisation cartographique interactive, avec une large communauté pour le support et les extensions.
-3. **Structuration du projet :**
-   - Séparation des fonctionnalités en composants Vue pour une meilleure maintenabilité.
-   - Utilisation de styles SCOPED dans les composants pour éviter les conflits.
-
-
-
-## 🚀 **Perspectives d'amélioration**
-1. **Ajout d'un localisateur de carte :**
-   - Afficher une vue miniature pour situer la zone explorée.
-2. **Export des résultats NDVI :**
-   - Permettre l'export des données interrogées en format `.csv`.
-3. **Comparaison multi-zones :**
-   - Ajouter la possibilité d'interroger 3 à 5 zones simultanément et superposer leurs graphiques NDVI.
-4. **Amélioration des légendes :**
-   - Rendre la légende NDVI conforme au mode sombre des autres éléments.
-5. **Optimisation de la performance :**
-   - Charger dynamiquement les couches NDVI selon les besoins pour améliorer la vitesse.
-
-
-
-## 🛠️ **Installation**
-1. Clonez ce dépôt :
-   ```bash
-   git clone https://github.com/username/webmapping-project.git
-   ```
-2. Installez les dépendances :
-   ```bash
-   npm install
-   ```
-3. Lancez le serveur de développement :
-   ```bash
-   npm run dev
-   ```
-4. Accédez à l'application sur `http://localhost:5173/`.
-
-
-
-## 📂 **Structure du projet**
-```
-├── src/
-│   ├── components/
-│   │   ├── InfoBox.vue          # Présentation des objectifs
-│   │   ├── LayerControls.vue    # Contrôles des couches
-│   │   ├── MapContainer.vue     # Carte interactive principale
-│   │   ├── MapView.vue          # Combinaison carte + contrôles
-│   │   └── NdviChart.vue        # Graphiques NDVI avec interactivé
-│   ├── App.vue                  # Composant racine
-│   ├── main.js                  # Point d'entrée principal
-│   └── style.css                # Styles globaux
-├── public/
-│   └── index.html               # Fichier HTML principal
-└── package.json                 # Dépendances npm
+```text
+ndvi-webmapping-toulouse/
+|-- webmapping/
+|   |-- src/
+|   |-- public/
+|   `-- package.json
+|-- scripts_geotraitements/
+`-- README.md
 ```
 
+---
 
-## 📜 **Crédits**
-- **Encadrement pédagogique :** Laurent Jégou et Nicolas Lagarrigue.
-- **Technologies open source :** Vue.js, Leaflet.js, GeoServer.
-- **Contributeur principal :** Lucas Lima.
+## Why this repo matters
 
+This repository shows:
+
+- WebGIS frontend development for geospatial exploration
+- publication and consumption of geospatial web services
+- interaction design for temporal raster data
+- a practical bridge between remote sensing outputs and web visualization
+
+---
+
+## Context
+
+This project was developed in the SIGMA MSc as a WebMapping exercise, but it remains a useful public prototype of a geospatial web interface.
